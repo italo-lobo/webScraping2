@@ -1,12 +1,16 @@
 import time
 import json
-import csv
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
+
+totalxpuesto=[]
 
 # Inicializar el driver de Selenium
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -51,12 +55,12 @@ for i in elemento:
     for a in resultados: 
         nombrePuesto = a.h3.get_text()
         link = a.contents[1].attrs['href']
-       
         ofertasLaborales.append({"nombrePuesto": nombrePuesto, "link": link})
+        
+    
     diccionario[i.text]=ofertasLaborales
-
-
-            
+   
+    totalxpuesto.append(len(ofertasLaborales))        
             
 # borrar el input del buscador
     driver.find_element(
@@ -64,12 +68,10 @@ for i in elemento:
 
 
 
-
+print(listaPuestos)
+print(totalxpuesto)
 
 
 
 with open("json.json","w") as archivo_json:
     archivo_json.write(json.dumps(diccionario))
-    
-with open('archivo.csv', mode='w', newline='') as archivo:
-    writer = csv.writer(diccionario)
